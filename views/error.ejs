@@ -1,0 +1,14 @@
+<% layout('layouts/boilerplate.ejs') %>
+
+<div class="d-flex justify-content-center align-items-center"">
+  <div class="col-md-8">
+    <div class="alert alert-danger" role="alert">
+      <h4 class="alert-heading">Error!</h4>
+      <p><%= err.message %> 
+        (<%= err.statusCode %>)
+      </p>
+      <hr />
+      <p class="mb-0"><a href="/campgrounds">Back To Campgrounds</a></p>
+    </div>
+  </div>
+</div>

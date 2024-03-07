@@ -1,0 +1,168 @@
+<% layout('layouts/boilerplate.ejs') %>
+<link rel="stylesheet" href="/stylesheets/stars.css" />
+
+<div class="row">
+  <div class="col-lg-6">
+    <div class="card mb-5">
+      <!-- Carousel -->
+      <div
+        id="carouselExampleControls"
+        class="carousel slide"
+        data-bs-ride="carousel"
+      >
+        <div class="carousel-inner">
+          <% for(let [index, img] of campground.images.entries()){ %>
+          <div class="carousel-item <%= index === 0 ? 'active' : '' %>">
+            <img
+              crossorigin="anonymous"
+              src="<%= img.url %>"
+              class="d-block w-100"
+              alt="..."
+              data-bs-toggle="modal"
+              data-bs-target="#imageModal<%= index %>"
+            />
+          </div>
+          <% } %>
+        </div>
+        <!-- Carousel Indicators -->
+        <div class="carousel-indicators">
+          <% for(let [index, img] of campground.images.entries()){ %>
+          <button
+            type="button"
+            data-bs-target="#carouselExampleControls"
+            data-bs-slide-to="<%= index %>"
+            class="<%= index === 0 ? 'active' : '' %>"
+          >
+            <img src="<%= img.url %>" class="d-block w-100" alt="..." />
+          </button>
+          <% } %>
+        </div>
+        <!-- Previous & Next Buttons -->
+        <% if (campground.images.length > 1) { %>
+        <button
+          class="carousel-control-prev"
+          type="button"
+          data-bs-target="#carouselExampleControls"
+          data-bs-slide="prev"
+        >
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button
+          class="carousel-control-next"
+          type="button"
+          data-bs-target="#carouselExampleControls"
+          data-bs-slide="next"
+        >
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+        <% } %>
+      </div>
+      <!-- Modal -->
+      <% for(let [index, img] of campground.images.entries()){ %>
+      <div
+        class="modal fade"
+        id="imageModal<%= index %>"
+        tabindex="-1"
+        aria-labelledby="imageModalLabel<%= index %>"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog modal-dialog-centered modal-xl">
+          <div class="modal-content">
+            <div class="modal-body">
+              <img
+                src="<%= img.url %>"
+                class="img-fluid mx-auto d-block"
+                alt="..."
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <% } %>
+      <div class="card-body">
+        <h5 class="card-title"><%= campground.title %></h5>
+        <p class="card-text"><%= campground.discription %></p>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item text-muted"><%= campground.location %></li>
+        <li class="list-group-item text-muted">
+          Submitted by <b>@<%= campground.author.username %></b>
+        </li>
+        <li class="list-group-item">$<%= campground.price %>/night</li>
+      </ul>
+      <% if(currentUser && campground.author.equals(currentUser._id)){ %>
+      <div class="card-body">
+        <a
+          href="/campgrounds/<%= campground._id %>/edit"
+          class="btn btn-warning"
+          >Edit</a
+        >
+        <form
+          class="d-inline"
+          action="/campgrounds/<%=campground._id%>?_method=DELETE"
+          method="post"
+        >
+          <button class="btn btn-danger">Delete</button>
+        </form>
+      </div>
+      <% } %>
+      <div class="card-footer text-muted">2 days ago</div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div id="map" class="mb-5"></div>
+    <% if(currentUser){ %>
+    <h2>Leave a Review</h2>
+    <form
+      action="/campgrounds/<%= campground._id %>/reviews"
+      method="post"
+      class="mb-3 validated-form"
+      novalidate
+    >
+      <div class="mb-3">
+        <fieldset class="starability-checkmark">
+          <!-- Your star rating input fields -->
+        </fieldset>
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="body">Review Text</label>
+        <textarea
+          class="form-control"
+          name="review[body]"
+          id="body"
+          cols="30"
+          rows="3"
+          required
+        ></textarea>
+        <div class="invalid-feedback">Please enter a valid Text.</div>
+      </div>
+      <button class="btn btn-success">Submit</button>
+    </form>
+    <% } %> <% for(let review of campground.reviews){ %>
+    <div class="mb-3 card">
+      <div class="card-body">
+        <h6 class="card-subtitle mb-2 text-muted">
+          <%= review.author.username %>
+        </h6>
+        <!-- Your review details here -->
+        <% if(currentUser && review.author.equals(currentUser._id)){ %>
+        <form
+          action="/campgrounds/<%= campground._id %>/reviews/<%= review._id %>?_method=DELETE"
+          method="post"
+        >
+          <button class="btn btn-sm btn-danger">Delete</button>
+        </form>
+        <% } %>
+      </div>
+    </div>
+    <% } %>
+  </div>
+</div>
+
+<script>
+  const campground = <%- JSON.stringify(campground) %>;
+</script>
+<script src="/javascripts/showPageMap.js"></script>

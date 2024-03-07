@@ -1,0 +1,46 @@
+<% layout('layouts/boilerplate') %>
+
+<div
+class="container-fluid d-flex justify-content-center align-items-center mt-md-5 mt-1 mb-5"
+>
+  <div class="row">
+    <div class="col-md-8 offset-md-2 col-xl-6 offset-xl-3">
+      <div class="card shadow">
+        <img
+          src="https://c4.wallpaperflare.com/wallpaper/649/751/637/log-horizon-anime-anime-girls-akatsuki-log-horizon-wallpaper-preview.jpg"
+          alt=""
+          class="card-img-top"
+        />
+        <div class="card-body">
+          <h5 class="card-title">Register</h5>
+
+          <form action="/register" method="POST" class="needs-validation" novalidate>
+            <div class="mb-3">
+              <label class="form-label" for="username">Username</label>
+              <input class="form-control" type="text" id="username" name="username" required>
+              <div class="invalid-feedback">Please enter a valid Username.</div>
+            </div>
+          
+            <div class="mb-3">
+              <label class="form-label" for="email">Email</label>
+              <input class="form-control" type="email" id="email" name="email" required>
+              <div class="invalid-feedback">Please enter a valid Email.</div>
+            </div>
+          
+            <div class="mb-3">
+              <label class="form-label" for="password">Password</label>
+              <input class="form-control" type="password" id="password" name="password" required>
+              <div class="invalid-feedback">Please enter a valid Password.</div>
+            </div>
+          
+            <div class="d-grid mb-3">
+              <button class="btn btn-success btn-lg" type="submit">Register</button>
+            </div>
+          
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
